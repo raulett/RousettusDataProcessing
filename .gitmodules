@@ -1,0 +1,3 @@
+[submodule "lib/LinearSplineInterpolation"]
+	path = lib/LinearSplineInterpolation
+	url = https://github.com/raulett/LinearSplineInterpolation
