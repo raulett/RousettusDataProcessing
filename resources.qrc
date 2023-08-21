@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/plugins/RousettusDataProcessing" >
+        <file>resources/rousettus_data_Icon.png</file>
+    </qresource>
+    <qresource prefix="/plugins/RousettusDataProcessing" >
+        <file>resources/warning.png</file>
+    </qresource>
+    <resources>
+        <include location="plugins/RousettusDataProcessing/libs/LinearSplineInterpolation"/>
+    </resources>
+</RCC>
