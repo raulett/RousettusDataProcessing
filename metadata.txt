@@ -6,7 +6,7 @@
 name=Rousettus Data Peocessing
 qgisMinimumVersion=3.19
 description=tool process geophysical data, collected with SibGis UAV platform
-version=0.1.20230822 build 7
+version=0.1.20230907 build 32
 author=Vladimir Morozov
 email=raulett@gmail.com
 
@@ -29,7 +29,7 @@ homepage=http://homepage
 category=Plugins
 icon=resources/rousettus_data_Icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False

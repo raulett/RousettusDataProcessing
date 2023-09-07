@@ -28,13 +28,13 @@ from qgis.PyQt.QtWidgets import QAction
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-# from .GUI.RousettusMainWindow import RousettusMainWindow
+from .GUI.Handlers.RousettusDataMainWindowHandle import RousettusDataMainWindowHandle
+
 import os.path
 
 
 class RousettusProcessingMain:
     """QGIS Plugin Implementation."""
-
 
     def __init__(self, iface):
         """Constructor.
@@ -45,24 +45,7 @@ class RousettusProcessingMain:
         :type iface: QgsInterface
         """
 
-        """Enable tools flags"""
-        self.enable_tools_flags = {
-            'data processing': (True,
-                {
-                    'gamma data': (True,
-                    {
-                        'import data': (True,
-                            {
-                                'CSV gamma': (True, None)
-                            })
-                    }),
-                    'magnetic data': (True,
-                    {
-                        'variation calculate': (True, None)
-                    })
-            })
-        }
-
+        self.mainWindow = None
         # Save reference to the QGIS interface
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
         self.iface = iface
@@ -79,16 +62,16 @@ class RousettusProcessingMain:
         self.first_start = None
 
     def add_action(
-        self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+            self,
+            icon_path,
+            text,
+            callback,
+            enabled_flag=True,
+            add_to_menu=True,
+            add_to_toolbar=True,
+            status_tip=None,
+            whats_this=None,
+            parent=None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -165,7 +148,6 @@ class RousettusProcessingMain:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -174,22 +156,20 @@ class RousettusProcessingMain:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
     def run(self):
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
-        print ('RousettusProcessingMain.py run call')
-        if self.first_start == True:
+        # print ('RousettusProcessingMain.py run call')
+        if self.first_start:
             self.first_start = False
-            # self.mainWindow = RousettusMainWindow(self.enable_tools_flags)
+            self.mainWindow = RousettusDataMainWindowHandle()
 
-        print('RousettusProcessingMain.py if self.first_start == True: call')
-
+        # print('RousettusProcessingMain.py if self.first_start == True: call')
 
         # show the dialog
-        # self.mainWindow.show()
+        self.mainWindow.show()
         # Run the dialog event loop
         # result = self.mainWindow.exec()
         # See if OK was pressed
@@ -197,4 +177,3 @@ class RousettusProcessingMain:
         #     # Do something useful here - delete the line containing pass and
         #     # substitute with your code.
         #     pass
-

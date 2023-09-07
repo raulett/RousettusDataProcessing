@@ -12,7 +12,7 @@
         git sha              : $Format:%H$
 
 """
-import sys
+# import sys
 
 
 def classFactory(iface):  # pylint: disable=invalid-name
@@ -22,12 +22,10 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
 
-    import os
-    current_plugin_path = os.path.dirname(os.path.realpath(__file__))
-    if current_plugin_path not in sys.path:
-        sys.path.append(current_plugin_path)
-    os.environ['PYTHONPATH'] = f"{os.getenv('PYTHONPATH')}{os.path.dirname(os.path.realpath(__file__))};"
-    print(os.getenv('PYTHONPATH'))
-
+    # import os
+    # current_plugin_path = os.path.dirname(os.path.realpath(__file__))
+    # if current_plugin_path not in sys.path:
+    #     sys.path.append(current_plugin_path)
+    # os.environ['PYTHONPATH'] = f"{os.getenv('PYTHONPATH')}{os.path.dirname(os.path.realpath(__file__))};"
     from .RousettusProcessingMain import RousettusProcessingMain
     return RousettusProcessingMain(iface)

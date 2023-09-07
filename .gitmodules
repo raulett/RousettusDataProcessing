@@ -1,3 +1,7 @@
 [submodule "lib/LinearSplineInterpolation"]
 	path = lib/LinearSplineInterpolation
 	url = https://github.com/raulett/LinearSplineInterpolation
+[submodule "lib/gpxpy"]
+	path = lib/gpxpy
+	url = git@github.com:tkrajina/gpxpy.git
+	branch = master

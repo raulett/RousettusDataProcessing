@@ -4,7 +4,7 @@ import os
 
 
 class AboutHandle(Ui_DialogAbout, QDialog):
-    debug = 0
+    debug = 1
     def __init__(self, parent = None):
         super(AboutHandle, self).__init__(parent)
         self.setupUi(self)
@@ -13,7 +13,7 @@ class AboutHandle(Ui_DialogAbout, QDialog):
 
     def initGui(self):
         current_path = os.path.dirname(os.path.abspath(__file__)).split('\\')
-        root_path = '\\'.join(current_path[0: len(current_path) - 2]) + "\\"
+        root_path = '\\'.join(current_path[0: len(current_path) - 3]) + "\\"
         metadata_file = open(os.path.join(root_path, 'metadata.txt'), 'r')
         lines = metadata_file.readlines()
         metadata_file.close()

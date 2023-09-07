@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+import configparser
+from abc import abstractmethod, ABC
 
 
-class Configurable(ABC):
+class Configurable():
+    section_name: str = NotImplemented
+
     def __init__(self):
-        self.section_name = None
         self.config = None
 
     # load config function
@@ -16,6 +18,6 @@ class Configurable(ABC):
     def store_config(self):
         pass
 
-    def set_config(self, config):
+    def set_config(self, config: configparser.ConfigParser):
         self.config = config
         return self

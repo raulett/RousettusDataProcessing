@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>RousettusTool</string>
+   <string>Rousettus Data Processing</string>
   </property>
   <property name="styleSheet">
    <string notr="true">font-size:10pt</string>
@@ -202,24 +202,19 @@
     <property name="title">
      <string>Data Processing</string>
     </property>
-    <widget class="QMenu" name="menuMagnetic_Data">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
+    <widget class="QMenu" name="menuGNSS_Data">
      <property name="title">
-      <string>Magnetic Data</string>
+      <string>GNSS Data</string>
      </property>
-     <addaction name="actionVariation_calculate"/>
+     <addaction name="actionImport"/>
     </widget>
-    <addaction name="menuMagnetic_Data"/>
     <addaction name="actionGammaspectromery_Data"/>
-    <addaction name="actionGNSS_Data"/>
+    <addaction name="menuGNSS_Data"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="OpenPrjButton"/>
     <addaction name="separator"/>
     <addaction name="exitButton"/>
    </widget>
@@ -281,9 +276,9 @@
     <string>Spectromery data</string>
    </property>
   </action>
-  <action name="actionGNSS_Data">
+  <action name="actionImport">
    <property name="text">
-    <string>GNSS Data</string>
+    <string>Import</string>
    </property>
   </action>
  </widget>
