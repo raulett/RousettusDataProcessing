@@ -42,7 +42,7 @@ class GnssImportWindowHandle(Ui_Import_GNSS_widget, QDialog, Configurable):
         if self.ds_combobox.currentIndex() >= 0:
             new_widget_class = self.ds_combobox.currentData()
             index = self.horizontalLayout.indexOf(self.current_import_widget)
-            new_widget = new_widget_class()
+            new_widget = new_widget_class(self.main_window)
             self.current_import_widget.deleteLater()
             self.groupBox.layout().insertWidget(index, new_widget)
             self.current_import_widget = new_widget

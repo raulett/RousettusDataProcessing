@@ -36,6 +36,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         self.rousettus_config_file = os.path.join(self.plugin_path, 'config.ini')
         self.rousettus_config = configparser.ConfigParser()
         self.load_config()
+        self.progressBar.setRange(0, 100)
 
         self.initGui()
 
