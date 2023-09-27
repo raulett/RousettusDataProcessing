@@ -210,8 +210,20 @@
        </item>
        <item row="1" column="2">
         <widget class="QLabel" name="features_count_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>240</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
-          <string>There is: 0 geometries of this type.</string>
+          <string>There is: 0 geometries with time data.</string>
          </property>
         </widget>
        </item>
@@ -239,7 +251,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="import_gpx_button">
         <property name="text">
          <string>Import</string>
         </property>
@@ -247,6 +259,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_5">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Cancel</string>
         </property>
