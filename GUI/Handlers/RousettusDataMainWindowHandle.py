@@ -36,6 +36,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         self.rousettus_config_file = os.path.join(self.plugin_path, 'config.ini')
         self.rousettus_config = configparser.ConfigParser()
         self.load_config()
+        self.progressBar.setRange(0, 100)
 
         self.initGui()
 
@@ -53,9 +54,6 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         # print('Main window init gui')
         # print('main window before get current path')
         self.prj_name, self.current_project_path, self.prj_full_path = get_current_project_name()
-        # print('main window prj name {}, current path {}, prj_full_path {}'.format(self.prj_name,
-        #                                                                           self.current_project_path,
-        #                                                                           self.prj_full_path))
         self.label_prj_name.setText(self.prj_name)
         self.label_prj_name.setToolTip(self.prj_name)
         width = self.label_prj_name.fontMetrics().boundingRect(self.label_prj_name.text()).width()
@@ -94,7 +92,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
 
     def close_tab(self, current_index):
         if self.debug:
-            print("closing wiget is {}, profile generate type is {}".format(self.tabWidget.tabText(current_index),
+            print("closing widget is {}, profile generate type is {}".format(self.tabWidget.tabText(current_index),
                                                                             type(
                                                                                 self.tabWidget.tabText(current_index))))
         self.tab_exist_flags['{}'.format(self.tabWidget.widget(current_index).section_name)] = 0
@@ -115,7 +113,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         for i in range(tab_widget_count):
             self.tabWidget.widget(i).init_gui()
 
-        if (len(self.current_project_path.strip()) != 0):
+        if len(self.current_project_path.strip()) != 0:
             QgsMessageLog.logMessage("{}. {}".format('main', "project {} loaded".format(self.prj_name)),
                                      "Rousettus_Tool",
                                      level=Qgis.Info)

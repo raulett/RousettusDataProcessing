@@ -21,6 +21,8 @@
  *                                                                         *
  ***************************************************************************/
 """
+import sys
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
@@ -45,6 +47,7 @@ class RousettusProcessingMain:
         :type iface: QgsInterface
         """
 
+        self.current_plugin_path = None
         self.mainWindow = None
         # Save reference to the QGIS interface
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
@@ -155,9 +158,16 @@ class RousettusProcessingMain:
                 u'&Rousettus Data Processing',
                 action)
             self.iface.removeToolBarIcon(action)
+        if self.current_plugin_path in sys.path:
+            sys.path.remove(self.current_plugin_path)
 
     def run(self):
         """Run method that performs all the real work"""
+        import os
+        self.current_plugin_path = os.path.dirname(os.path.realpath(__file__))
+        if self.current_plugin_path not in sys.path:
+            sys.path.append(self.current_plugin_path)
+        # os.environ['PYTHONPATH'] = f"{os.getenv('PYTHONPATH')}{os.path.dirname(os.path.realpath(__file__))};"
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
