@@ -12,6 +12,7 @@ from ...tools.Configurable import Configurable
 
 from ...GUI.Handlers.Help.AboutHandle import AboutHandle
 from ...GUI.Handlers.DataProcessingHandlers.GnssImportWindowHandle import GnssImportWindowHandle
+from ...GUI.Handlers.DataProcessingHandlers.SpectrumImportWindowHandle import SpectrumImportWindowHandle
 
 
 class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
@@ -38,7 +39,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         self.load_config()
         self.progressBar.setRange(0, 100)
 
-        self.initGui()
+        self.init_gui()
 
         # Минимизация окна
         # self.setWindowState(self.windowState() | Qt.WindowMinimized)
@@ -48,9 +49,12 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         QgsProject.instance().readProject.connect(self.prj_changed)
         self.tabWidget.tabCloseRequested.connect(lambda index: self.close_tab(index))
         self.actionAbout_Rousettus.triggered.connect(self.show_about)
-        self.actionImport.triggered.connect(lambda: self.add_tab(GnssImportWindowHandle, "Import GNSS Data"))
+        self.action_import_gnss.triggered.connect(lambda: self.add_tab(GnssImportWindowHandle,
+                                                                       "Import GNSS Data"))
+        self.action_import_spectrum.triggered.connect(lambda: self.add_tab(SpectrumImportWindowHandle,
+                                                                           "Import Spectrum"))
 
-    def initGui(self):
+    def init_gui(self):
         # print('Main window init gui')
         # print('main window before get current path')
         self.prj_name, self.current_project_path, self.prj_full_path = get_current_project_name()
@@ -108,7 +112,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
 
     # slot for project changed signal
     def prj_changed(self):
-        self.initGui()
+        self.init_gui()
         tab_widget_count = self.tabWidget.count()
         for i in range(tab_widget_count):
             self.tabWidget.widget(i).init_gui()

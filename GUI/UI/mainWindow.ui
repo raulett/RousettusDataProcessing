@@ -206,9 +206,15 @@
      <property name="title">
       <string>GNSS Data</string>
      </property>
-     <addaction name="actionImport"/>
+     <addaction name="action_import_gnss"/>
     </widget>
-    <addaction name="actionGammaspectromery_Data"/>
+    <widget class="QMenu" name="menuSpectromery_data">
+     <property name="title">
+      <string>Spectromery data</string>
+     </property>
+     <addaction name="action_import_spectrum"/>
+    </widget>
+    <addaction name="menuSpectromery_data"/>
     <addaction name="menuGNSS_Data"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -271,14 +277,14 @@
     <string>About Rousettus</string>
    </property>
   </action>
-  <action name="actionGammaspectromery_Data">
-   <property name="text">
-    <string>Spectromery data</string>
-   </property>
-  </action>
-  <action name="actionImport">
+  <action name="action_import_gnss">
    <property name="text">
     <string>Import</string>
+   </property>
+  </action>
+  <action name="action_import_spectrum">
+   <property name="text">
+    <string>Import data</string>
    </property>
   </action>
  </widget>

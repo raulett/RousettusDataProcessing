@@ -2,7 +2,7 @@ import configparser
 from abc import abstractmethod, ABC
 
 
-class Configurable():
+class Configurable:
     section_name: str = NotImplemented
 
     def __init__(self):
