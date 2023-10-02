@@ -1,9 +1,9 @@
-from ...UI.DataProcessing.GNSS_import_window_ui import Ui_Import_GNSS_widget
+from ....UI.DataProcessing.GNSS_import_window_ui import Ui_Import_GNSS_widget
 from .GpxImportWidgetHandle import GpxImportWidgetHandle
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QPushButton
-from ....tools.Configurable import Configurable
-from .ImportSourceDataModel import ImportSourceDataModel
-from .import_handler_changed import import_handler_changed
+from .....tools.Configurable import Configurable
+from ..ImportSourceDataModel import ImportSourceDataModel
+from ..import_handler_changed import import_handler_changed
 
 import os
 

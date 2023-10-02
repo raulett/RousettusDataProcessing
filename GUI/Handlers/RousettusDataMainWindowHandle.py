@@ -1,27 +1,30 @@
 import os
 import configparser
+import json
 
-from qgis.PyQt.QtWidgets import QMainWindow, QDialog, QWidget
+from qgis.PyQt.QtWidgets import QMainWindow
 from qgis.core import *
 from qgis.core import QgsProject
 from qgis.core import QgsMessageLog
 
 from ...GUI.UI.mainWindow_ui import Ui_MainWindow
 from ...tools.get_current_project_name import get_current_project_name
-from ...tools.Configurable import Configurable
+from ...tools.ConfigurableJson import ConfigurableJson
 
 from ...GUI.Handlers.Help.AboutHandle import AboutHandle
-from ...GUI.Handlers.DataProcessingHandlers.GnssImportWindowHandle import GnssImportWindowHandle
-from ...GUI.Handlers.DataProcessingHandlers.SpectrumImportWindowHandle import SpectrumImportWindowHandle
+from ...GUI.Handlers.DataProcessingHandlers.GnssImportHandle.GnssImportWindowHandle import GnssImportWindowHandle
+from ...GUI.Handlers.DataProcessingHandlers.SpectrumImportHandle. \
+    SpectrumImportWindowHandle import SpectrumImportWindowHandle
 
 
-class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
+class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, ConfigurableJson):
     debug = 1
     section_name = 'rousettus_main'
 
     def __init__(self, parent=None):
         """Constructor."""
         super(RousettusDataMainWindowHandle, self).__init__(parent)
+        self.config = {}
         self.prj_full_path = None
         self.prj_name = None
         self.current_project_path = None
@@ -84,30 +87,34 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
                     break
         else:
             tab_widget = tab_class(main_window=self)
-            if isinstance(tab_widget, Configurable):
-                tab_widget.set_config(self.rousettus_config)
+            if isinstance(tab_widget, ConfigurableJson):
+                self.add_saving_children(tab_widget.get_config())
             self.tabWidget.addTab(tab_widget, tab_name)
             self.tab_exist_flags[section_name] = 1
             self.tabWidget.setCurrentWidget(tab_widget)
-            if 'TABS' not in self.rousettus_config:
-                self.rousettus_config['TABS'] = {}
+            if 'TABS' not in self.config.keys():
+                self.config['TABS'] = {}
+            if section_name not in self.config['TABS'].keys():
+                self.config['TABS'][section_name] = {}
             if section_name:
-                self.rousettus_config['TABS'][section_name] = str(True)
+                self.config['TABS'][section_name]['is_open'] = True
 
     def close_tab(self, current_index):
         if self.debug:
             print("closing widget is {}, profile generate type is {}".format(self.tabWidget.tabText(current_index),
-                                                                            type(
-                                                                                self.tabWidget.tabText(current_index))))
+                                                                             type(
+                                                                                 self.tabWidget.tabText(
+                                                                                     current_index))))
         self.tab_exist_flags['{}'.format(self.tabWidget.widget(current_index).section_name)] = 0
-        if isinstance(self.tabWidget.widget(current_index), Configurable):
-            self.rousettus_config['TABS'][self.tabWidget.currentWidget().section_name] = str(False)
-            self.tabWidget.widget(current_index).store_config()
+        if isinstance(self.tabWidget.widget(current_index), ConfigurableJson):
+            self.config['TABS'][self.tabWidget.widget(current_index).section_name]['is_open'] = False
+            self.config['TABS'][self.tabWidget.widget(current_index).section_name] = self.tabWidget.widget(
+                current_index).get_config()
         self.tabWidget.widget(current_index).close()
         self.tabWidget.removeTab(current_index)
         if self.debug:
             print("close_tab func, after delete = {}".format(self.tab_exist_flags))
-        self.store_config()
+
         QgsProject.instance().write()
 
     # slot for project changed signal
@@ -125,7 +132,7 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
     # Config store and load
     # load config function
     def load_config(self):
-        self.rousettus_config.read(self.rousettus_config_file)
+        pass
         # TODO Добавить загрузку табов
         # if 'TABS' in self.rousettus_config and self.rousettus_config['TABS'].getboolean("profile_generate",
         #                                                                                 fallback=False):
@@ -137,15 +144,13 @@ class RousettusDataMainWindowHandle(Ui_MainWindow, QMainWindow, Configurable):
         #     self.add_route_plan_tab()
 
     # store config
-    def store_config(self):
-        for tab_index in range(self.tabWidget.count()):
-            self.tabWidget.widget(tab_index).store_config()
-        with open(self.rousettus_config_file, 'w') as config_file:
-            self.rousettus_config.write(config_file)
-        # if self.debug:
-        #     print('config sections: ', self.rousettus_config.sections())
+    def get_config(self):
+        return {self.section_name: self.config}
 
     def closeEvent(self, *args, **kwargs):
-        # print('close call')
-        self.store_config()
+        print("call close")
+        write_file = open(os.sep.join(os.path.dirname(
+            os.path.abspath(__file__)).split(os.sep)[:-2] + ["rousettus_config.json"]), "w")
+        write_file.write(json.dumps(self.get_config()))
+        write_file.close()
         QgsProject.instance().write()

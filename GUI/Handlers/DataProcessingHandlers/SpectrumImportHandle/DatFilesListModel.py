@@ -1,5 +1,7 @@
 import os
+import re
 import typing
+from datetime import datetime
 
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QColor
@@ -11,6 +13,7 @@ class DatFilesListModel(QAbstractTableModel):
 
     def __init__(self, main_window=None):
         super(DatFilesListModel, self).__init__()
+        self._filename_pattern = r''
         self.main_window = main_window
         self._data = {}
         self._headers = ['Files№', 'Path']
@@ -36,6 +39,11 @@ class DatFilesListModel(QAbstractTableModel):
                 return key
             elif column_name == 'Files№':
                 return f"{os.path.basename(self._data[key][0]) if len(self._data[key]) else None} ..."
+        if role == Qt.BackgroundRole:
+            if self.check_filename_for_pattern(os.path.basename(self._data[key][0])):
+                return QColor('#ffffff')
+            else:
+                return QColor('#ff0000')
         return None
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> typing.Any:
@@ -72,6 +80,29 @@ class DatFilesListModel(QAbstractTableModel):
         self._data = new_data
         self.endResetModel()
         self.change_process_finished.emit()
+
+    def set_filename_pattern(self, pattern: str):
+        self._filename_pattern = pattern
+
+    def check_filename_for_pattern(self, filename):
+        find_groups = re.findall(self._filename_pattern, filename)
+        print("1: ", find_groups)
+        if len(find_groups) > 0:
+            find_groups = find_groups[0]
+        else:
+            return False
+        print("2: ", find_groups)
+        if len(find_groups) == 3:
+            try:
+                filename_datetime = datetime.strptime(find_groups[0]+find_groups[1], r'%Y%m%d%H%M%S')
+                exp_time = int(find_groups[2])
+                return True
+            except Exception as e:
+                print(e)
+                return False
+        else:
+            return False
+
 
 
 class AddDatFilesWorker(QThread):

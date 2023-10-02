@@ -13,11 +13,12 @@ from PyQt5.QtCore import QAbstractTableModel, Qt, QModelIndex, QAbstractListMode
     QRunnable, QThreadPool
 from qgis.core import QgsFeature, QgsPoint
 
-from ....tools.Configurable import Configurable
-from ....tools.constants import datetime_format, default_datetime
-from ...UI.DataProcessing.import_gpx_widget_ui import Ui_gpx_import_form
-from ....lib.gpxpy import gpxpy
-from ....tools.VectorLayerSaverGPKG.GpsLayerSaverGPKG import GpsLayerSaverGPKG
+from .....tools.Configurable import Configurable
+from .....tools.constants import datetime_format, default_datetime
+from ....UI.DataProcessing.import_gpx_widget_ui import Ui_gpx_import_form
+from .....lib.gpxpy import gpxpy
+from .....tools.VectorLayerSaverGPKG.GpsLayerSaverGPKG import GpsLayerSaverGPKG
+from ..UavIdsListModel import UavIdsListModel
 
 
 class GpxFileListModel(QAbstractTableModel):
@@ -228,36 +229,6 @@ class GpxGeometriesTypesList(QAbstractListModel):
                    key=lambda i: self.files_list_model.get_count_data(self._data.__getitem__(i)))
 
 
-class UavIdsListModel(QAbstractListModel):
-    def __init__(self, gps_layer_saver: GpsLayerSaverGPKG):
-        super(UavIdsListModel, self).__init__()
-        self._layer_saver = gps_layer_saver
-        self._data = []
-        self._data_changed_handle()
-        self._data_provider = gps_layer_saver.get_layer().dataProvider()
-        # todo rem debug
-        print("UavIdsListModel data: ", self._data)
-        self._data_provider.dataChanged.connect(self._data_changed_handle)
-
-    def rowCount(self, parent=None):
-        return len(self._data)
-
-    def data(self, index: QModelIndex, role: int = Qt.ItemDataRole.DisplayRole):
-        if role == Qt.DisplayRole or role == Qt.UserRole:
-            return self._data[index.row()]
-        if role == Qt.EditRole:
-            return self._data[index.row()]
-
-    def _data_changed_handle(self):
-        self.beginResetModel()
-        self._data = list(self._layer_saver.get_layer().uniqueValues(
-            self._layer_saver.get_layer().fields().indexFromName(self._layer_saver.get_uav_id_fieldname())))
-        print("UavIdsListModel _data_changed_handle data: ", self._data, "len: ", len(self._data))
-        if len(self._data) == 0:
-            self._data.append('UAV ID')
-        self.endResetModel()
-
-
 class GpxImportWidgetHandle(Ui_gpx_import_form, QWidget, Configurable):
     section_name = 'import_gpx'
 
@@ -342,7 +313,7 @@ class GpxFilesImportToLayerWorker(QThread):
         progress_counter = 0
         total_count = len(self.filenames)
         print("run GpxFilesImportToLayerWorker, uav_id: ", self.uav_id)
-        self.file_loaded.emit(int(progress_counter/total_count * 100))
+        self.file_loaded.emit(int(progress_counter / total_count * 100))
         total_added_points = 0
         total_ignored_points = 0
         for filename in self.filenames:
@@ -409,6 +380,6 @@ class GpxFilesImportToLayerWorker(QThread):
             total_added_points += added_points
             total_ignored_points += ignored_points_count + ignored_points
             progress_counter += 1
-            self.file_loaded.emit(int(progress_counter/total_count * 100))
+            self.file_loaded.emit(int(progress_counter / total_count * 100))
         self.added_points.emit(total_added_points, total_ignored_points)
         self.finished.emit()

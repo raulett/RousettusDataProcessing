@@ -6,7 +6,7 @@
 name=Rousettus Data Peocessing
 qgisMinimumVersion=3.19
 description=tool process geophysical data, collected with SibGis UAV platform
-version=0.1.20231002 build 13
+version=0.1.20231003 build 33
 author=Vladimir Morozov
 email=raulett@gmail.com
 

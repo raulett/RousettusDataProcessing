@@ -1,13 +1,13 @@
 from PyQt5.QtWidgets import QDialog
 
-from ...UI.DataProcessing.Spectrum_data_import_ui import Ui_Import_spectrum_widget
-from ....tools.Configurable import Configurable
-from .ImportSourceDataModel import ImportSourceDataModel
-from .SpectrumImportHandle.DatImportWidgetHandle import DatImportWidgetHandle
-from .import_handler_changed import import_handler_changed
+from ....UI.DataProcessing.Spectrum_data_import_ui import Ui_Import_spectrum_widget
+from .....tools.ConfigurableJson import ConfigurableJson
+from ...DataProcessingHandlers.ImportSourceDataModel import ImportSourceDataModel
+from .DatImportWidgetHandle import DatImportWidgetHandle
+from ..import_handler_changed import import_handler_changed
 
 
-class SpectrumImportWindowHandle(Ui_Import_spectrum_widget, QDialog, Configurable):
+class SpectrumImportWindowHandle(Ui_Import_spectrum_widget, QDialog, ConfigurableJson):
     section_name = 'import_spectrum'
 
     def __init__(self, main_window=None):
@@ -26,5 +26,5 @@ class SpectrumImportWindowHandle(Ui_Import_spectrum_widget, QDialog, Configurabl
     def load_config(self):
         pass
 
-    def store_config(self):
-        pass
+    def get_config(self):
+        return {}
